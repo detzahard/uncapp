@@ -43,7 +43,7 @@ export function CourseSearchResult(props: CourseSearchResultProps): React.ReactE
     <div key={course.uuid} className="box">
       <div className="box-content">
         <div className="columns is-multiline">
-          <div className="column is-7">
+          <div className="column is-11">
             <h3 className="title">
               <Highlighter searchWords={props.result.matchedStrings} textToHighlight={course.title} autoEscape={true} />
             </h3>
