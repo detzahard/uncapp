@@ -59,11 +59,7 @@ export function CourseSearchResult(props: CourseSearchResultProps): React.ReactE
               <ol>{videos}</ol>
             </div>
           </div>
-          <div className="column is-5">
-            <figure className="image">
-              <img src={course.image} alt="Video thumbnail" className="thumbnail" />
-            </figure>
-          </div>
+          
           <div className="column is-12">
             <div className="buttons">
               <ToggleBookmarkButton

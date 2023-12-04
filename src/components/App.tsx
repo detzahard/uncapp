@@ -30,7 +30,7 @@ export default class App extends React.Component<unknown, AppState> {
       content: undefined,
       bookmarks: [],
       watchStatuses: [],
-      isDownloadEnabled: window.localStorage.getItem("download") === "true" || false,
+      isDownloadEnabled: true,
       isTipsModalVisible: false,
     };
   }

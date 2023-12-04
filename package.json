@@ -26,6 +26,7 @@
     "classnames": "^2.3.2",
     "fuse.js": "^7.0.0",
     "ga-4-react": "^0.1.281",
+    "hls.js": "^1.4.12",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

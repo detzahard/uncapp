@@ -1,14 +1,16 @@
 import { roleToString } from "../../model/Role";
-import React from "react";
+import React, { useState } from "react";
 import { Video } from "../../model/Video";
 import { ToggleWatchStatusButton } from "../ToggleWatchStatusButton";
 import { ToggleBookmarkButton } from "../BookmarkToggleButton";
 import { Bookmarkable } from "../../model/Bookmark";
 import { Watchable } from "../../model/WatchStatus";
-import { getStreamUrl } from "../../utils/UrlUtilities";
+import { getStreamUrl, getVideoUrl } from "../../utils/UrlUtilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
 import Highlighter from "react-highlight-words";
+import Hls from "hls.js";
+
 
 export interface VideoSearchResultProps {
   video: Video;
@@ -27,6 +29,110 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
     item: video,
   };
 
+  const [showVideoOverlay, setShowVideoOverlay] = useState(false);
+
+  const handleOpenVideoOverlay = () => {
+    setShowVideoOverlay(!showVideoOverlay);
+    if (!showVideoOverlay) {
+      stream();
+    }
+  };
+
+  const handleCloseVideoOverlay = () => {
+    setShowVideoOverlay(false);
+  };
+
+  const rgx = /([a-z0-9]{10})(:?\/|$)/g;
+
+  var hls: Hls | null = null;
+
+  if (Hls.isSupported()) {
+    var hlsjsConfig = {
+      "maxBufferSize": 0,
+      "maxBufferLength": 30,
+      "startPosition": 0
+    }
+    hls = new Hls(hlsjsConfig);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      document.getElementById("videop").play();
+    });
+  }
+
+  const stream = async () => {
+    console.log(`Called`);
+    if (hls == null) {
+      console.log("HLS not supported, please use a modern browser such as Chrome");
+      return;
+    }
+
+    let rawUrl = "https://www.skill-capped.com/lol/browse/course/3d5241zcrj/fqr6yn241z";
+    rawUrl = rawUrl.replace(/\/[^/]*$/, '');
+    let ids = [];
+    let match = null;
+    
+
+    while ((match = rgx.exec(rawUrl)) !== null) {
+      ids.push(match[1]);
+    }
+
+    if (ids.length < 1) {
+      console.log("Invalid URL");
+      console.log(ids)
+      console.log(rawUrl);
+      return;
+    }
+
+    const videoId = video.uuid;
+   
+    
+    console.log(`Video ID is ${videoId}`);
+    console.log("Looking for the final part...");
+    let last = 0;
+    let jump = true;
+
+    for (let i = 300; i <= 1000; i++) {
+      if (i == 1000) {
+        console.log("Error finding the last part");
+        return;
+      }
+
+      if (i == 0) i = 1;
+
+      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
+      console.log(`Testing ${url}`);
+    
+      try {
+        const resp = await fetch(url, { method: 'HEAD' });
+        if (resp.status === 403) {
+          if (i >= 50 && i % 50 === 0 && jump) {
+            last = i;
+            jump = true;
+            i -= 51;
+            continue;
+          }
+
+          break;
+        }
+        last = i;
+        jump = false;
+      } catch (e) {
+        console.log("Fetch failed, please install a Cross-Origin disabler extension for your browser or check your internet connectivity.");
+        return;
+      }
+    }
+
+    let data = "#EXTM3U\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:10";
+    for (let i = 0; i <= last; i++) {
+      data += `#EXTINF:10,\nhttps://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
+    }
+
+    console.log(data);
+
+    // Load the media for streaming
+    hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
+    hls.attachMedia(document.getElementById("videop"));
+  };
+  
   return (
     <div key={video.uuid} className="box">
       <div className="box-content">
@@ -48,6 +154,9 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
               </span>
             </div>
             <div className="buttons">
+              <button className="button is-small" onClick={handleOpenVideoOverlay}>
+                Open Video
+              </button>
               <ToggleBookmarkButton {...buttonProps} />
               <ToggleWatchStatusButton {...buttonProps} />
               {isDownloadEnabled && (
@@ -67,6 +176,12 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
           </div>
         </div>
       </div>
+      {showVideoOverlay && (
+        <div className="video-overlay">
+          {/* Add your VideoOverlay component here */}
+          <video height="720" width="1280" id="videop" controls
+            autoPlay />
+        </div>)}
     </div>
   );
 }
