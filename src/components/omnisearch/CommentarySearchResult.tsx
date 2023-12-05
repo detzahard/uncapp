@@ -1,5 +1,5 @@
 import { roleToString } from "../../model/Role";
-import React from "react";
+import React, { useState } from "react";
 import { getStreamUrl } from "../../utils/UrlUtilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
@@ -21,25 +21,95 @@ export interface CommentarySearchResultProps {
 
 export function CommentarySearchResult(props: CommentarySearchResultProps): React.ReactElement {
   const { commentary, isDownloadEnabled } = props;
-  const {
-    role,
-    uuid,
-    skillCappedUrl,
-    releaseDate,
-    staff,
-    champion,
-    opponent,
-    kills,
-    deaths,
-    assists,
-    gameLengthInMinutes,
-    carry,
-    type,
+  const { role, uuid, skillCappedUrl, releaseDate, staff, champion, opponent, kills, deaths, assists, gameLengthInMinutes, carry, type,
   } = commentary;
 
   const buttonProps = {
     ...props,
     item: commentary,
+  };
+
+  const [showVideoOverlay, setShowVideoOverlay] = useState(false);
+
+  const handleOpenVideoOverlay = () => {
+    setShowVideoOverlay(!showVideoOverlay);
+
+  };
+
+  const handleCloseVideoOverlay = () => {
+    setShowVideoOverlay(false);
+  };
+
+  var hls: Hls | null = null;
+
+  if (Hls.isSupported()) {
+    var hlsjsConfig = {
+      "maxBufferSize": 0,
+      "maxBufferLength": 30,
+      "startPosition": 0
+    }
+    hls = new Hls(hlsjsConfig);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      document.getElementById("videop").play();
+    });
+  }
+
+  const stream = async () => {
+    console.log(`Called`);
+    if (hls == null) {
+      console.log("HLS not supported, please use a modern browser such as Chrome");
+      return;
+    }
+
+    const videoId = video.uuid;
+
+    console.log(`Video ID is ${videoId}`);
+    console.log("Looking for the final part...");
+    let last = 0;
+    let jump = true;
+
+    for (let i = 300; i <= 1000; i++) {
+      if (i == 1000) {
+        console.log("Error finding the last part");
+        return;
+      }
+
+      if (i == 0) i = 1;
+
+      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
+      console.log(`Testing ${url}`);
+
+      try {
+        const resp = await fetch(url, { method: 'HEAD' });
+        if (resp.status === 403) {
+          if (i >= 50 && i % 50 === 0 && jump) {
+            last = i;
+            jump = true;
+            i -= 51;
+            continue;
+          }
+
+          break;
+        }
+        last = i;
+        jump = false;
+      } catch (e) {
+        console.log("Fetch failed, please install a Cross-Origin disabler extension for your browser or check your internet connectivity.");
+        return;
+      }
+    }
+
+    let data = "#EXTM3U\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:10";
+    for (let i = 0; i <= last; i++) {
+      data += `#EXTINF:10,\nhttps://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
+    }
+
+    console.log(data);
+
+    // Load the media for streaming
+    hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
+    const awa = "#" + video.uuid;
+    hls.attachMedia(document.getElementById(awa));
   };
 
   return (
@@ -48,9 +118,9 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
         <div className="columns is-multiline">
           <div className="column 7">
             <h3 className="title is-5">
-              <a href={skillCappedUrl}>
+              <span style={{ cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
                 {champion} vs {opponent}
-              </a>
+              </span>
             </h3>
             <div className="tags">
               <span className="tag is-primary">Content Type: Commentary</span>
@@ -74,20 +144,23 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
           </div>
           <div className="column is-12">
             <div className="buttons">
+              <button className="button is-small" onClick={handleOpenVideoOverlay}>
+                Open Video
+              </button>
               <ToggleBookmarkButton {...buttonProps} />
               <ToggleWatchStatusButton {...buttonProps} />
-              {isDownloadEnabled && (
-                <a href={getStreamUrl(commentary)} className="button bookmark is-small">
-                  <span className="icon is-small">
-                    <FontAwesomeIcon icon={faCloudDownloadAlt} />
-                  </span>
-                  <span>Download</span>
-                </a>
-              )}
             </div>
           </div>
         </div>
       </div>
+      {showVideoOverlay && (
+        <div className="video-overlay">
+          <button className="button is-small" onClick={stream}>
+            Start Video
+          </button>
+          <video height="720" width="1280" id={"#" + video.uuid} controls
+            autoPlay />
+        </div>)}
     </div>
   );
 }

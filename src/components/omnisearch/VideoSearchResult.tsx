@@ -39,7 +39,6 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
     setShowVideoOverlay(false);
   };
 
-
   var hls: Hls | null = null;
 
   if (Hls.isSupported()) {
@@ -61,25 +60,7 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
       return;
     }
 
-    let rawUrl = "https://www.skill-capped.com/lol/browse/course/3d5241zcrj/fqr6yn241z";
-    rawUrl = rawUrl.replace(/\/[^/]*$/, '');
-    let ids = [];
-    let match = null;
-
-
-    while ((match = rgx.exec(rawUrl)) !== null) {
-      ids.push(match[1]);
-    }
-
-    if (ids.length < 1) {
-      console.log("Invalid URL");
-      console.log(ids)
-      console.log(rawUrl);
-      return;
-    }
-
     const videoId = video.uuid;
-
 
     console.log(`Video ID is ${videoId}`);
     console.log("Looking for the final part...");
@@ -156,14 +137,6 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
               </button>
               <ToggleBookmarkButton {...buttonProps} />
               <ToggleWatchStatusButton {...buttonProps} />
-              {isDownloadEnabled && (
-                <a href={getStreamUrl(video)} className="button is-small bookmark">
-                  <span className="icon is-small">
-                    <FontAwesomeIcon icon={faCloudDownloadAlt} />
-                  </span>
-                  <span>Download</span>
-                </a>
-              )}
             </div>
           </div>
           <div className="column is-5">
