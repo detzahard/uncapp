@@ -1,6 +1,5 @@
 import { Video } from "../../model/Video";
 import { Course } from "../../model/Course";
-import Highlighter from "react-highlight-words";
 import React, { useState } from "react";
 import { getCourseVideoUrl, getStreamUrl } from "../../utils/UrlUtilities";
 import { Bookmarkable } from "../../model/Bookmark";
@@ -114,7 +113,7 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
   return (
     <li>
       <a href={link} className={textStyle}>
-        <Highlighter searchWords={matchedStrings} textToHighlight={title} autoEscape={true} />
+        {title}
       </a>{""}
       <button
         onClick={() => props.onToggleBookmark(video)}
@@ -139,9 +138,9 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
       >
         <FontAwesomeIcon icon={faCloudDownloadAlt} />
       </button>
-    
+
       {showVideoOverlay && (
-        
+
         <div className="video-overlay">
           <button className="button is-small" onClick={stream}>
             Open Video
@@ -150,8 +149,8 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
           <video height="720" width="1280" id="videop" controls
             autoPlay />
         </div>
-        )}
+      )}
     </li>
-    
+
   );
 }

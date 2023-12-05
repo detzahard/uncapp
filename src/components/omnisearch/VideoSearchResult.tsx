@@ -8,7 +8,6 @@ import { Watchable } from "../../model/WatchStatus";
 import { getStreamUrl, getVideoUrl } from "../../utils/UrlUtilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
-import Highlighter from "react-highlight-words";
 import Hls from "hls.js";
 
 
@@ -69,7 +68,7 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
     rawUrl = rawUrl.replace(/\/[^/]*$/, '');
     let ids = [];
     let match = null;
-    
+
 
     while ((match = rgx.exec(rawUrl)) !== null) {
       ids.push(match[1]);
@@ -83,8 +82,8 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
     }
 
     const videoId = video.uuid;
-   
-    
+
+
     console.log(`Video ID is ${videoId}`);
     console.log("Looking for the final part...");
     let last = 0;
@@ -100,7 +99,7 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
 
       const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`;
       console.log(`Testing ${url}`);
-    
+
       try {
         const resp = await fetch(url, { method: 'HEAD' });
         if (resp.status === 403) {
@@ -132,7 +131,7 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
     hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
     hls.attachMedia(document.getElementById("videop"));
   };
-  
+
   return (
     <div key={video.uuid} className="box">
       <div className="box-content">
@@ -140,11 +139,11 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
           <div className="column is-7">
             <h3 className="title is-5">
               <a href={video.skillCappedUrl}>
-                <Highlighter searchWords={matchedStrings} textToHighlight={video.title} autoEscape={true} />
+                {video.title}
               </a>
             </h3>
             <p>
-              <Highlighter searchWords={matchedStrings} textToHighlight={video.description} autoEscape={true} />
+              {video.description}
             </p>
             <div className="tags">
               <span className="tag is-primary">Content Type: Video</span>

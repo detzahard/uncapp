@@ -1,6 +1,5 @@
 import { Course } from "../../model/Course";
 import React from "react";
-import Highlighter from "react-highlight-words";
 import "./CourseSearchResult.css";
 import { Watchable } from "../../model/WatchStatus";
 import { FuseSearchResult } from "./search/FuseSearch";
@@ -45,7 +44,7 @@ export function CourseSearchResult(props: CourseSearchResultProps): React.ReactE
         <div className="columns is-multiline">
           <div className="column is-11">
             <h3 className="title">
-              <Highlighter searchWords={props.result.matchedStrings} textToHighlight={course.title} autoEscape={true} />
+              {course.title}
             </h3>
             <p>{course.description}</p>
             <div className="tags">
@@ -59,7 +58,7 @@ export function CourseSearchResult(props: CourseSearchResultProps): React.ReactE
               <ol>{videos}</ol>
             </div>
           </div>
-          
+
           <div className="column is-12">
             <div className="buttons">
               <ToggleBookmarkButton
