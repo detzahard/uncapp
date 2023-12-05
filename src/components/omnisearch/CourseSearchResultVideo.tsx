@@ -112,9 +112,9 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
 
   return (
     <li>
-      <a href={link} className={textStyle}>
+      <span style={{ cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
         {title}
-      </a>{""}
+      </span>{""}
       <button
         onClick={() => props.onToggleBookmark(video)}
         className={classNames("video-watched-button tag is-small is-outlined is-inverted is-rounded", {

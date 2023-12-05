@@ -138,9 +138,9 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
         <div className="columns is-multiline">
           <div className="column is-7">
             <h3 className="title is-5">
-              <a href={video.skillCappedUrl}>
+              <span style={{ cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
                 {video.title}
-              </a>
+              </span>
             </h3>
             <p>
               {video.description}
