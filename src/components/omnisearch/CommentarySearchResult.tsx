@@ -8,6 +8,7 @@ import { ToggleBookmarkButton } from "../BookmarkToggleButton";
 import { ToggleWatchStatusButton } from "../ToggleWatchStatusButton";
 import { Bookmarkable } from "../../model/Bookmark";
 import { Watchable } from "../../model/WatchStatus";
+import Hls from "hls.js";
 
 export interface CommentarySearchResultProps {
   commentary: Commentary;
