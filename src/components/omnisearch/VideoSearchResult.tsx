@@ -32,16 +32,13 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
 
   const handleOpenVideoOverlay = () => {
     setShowVideoOverlay(!showVideoOverlay);
-    if (!showVideoOverlay) {
-      stream();
-    }
+
   };
 
   const handleCloseVideoOverlay = () => {
     setShowVideoOverlay(false);
   };
 
-  const rgx = /([a-z0-9]{10})(:?\/|$)/g;
 
   var hls: Hls | null = null;
 
@@ -129,7 +126,8 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
 
     // Load the media for streaming
     hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
-    hls.attachMedia(document.getElementById("videop"));
+    const awa = "#" + video.uuid;
+    hls.attachMedia(document.getElementById(awa));
   };
 
   return (
@@ -139,8 +137,8 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
           <div className="column is-7">
             <h3 className="title is-5">
               <span style={{ cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
-                {video.title}
-              </span>
+                {video.title} {showVideoOverlay ? true : false}
+              </span>{""}
             </h3>
             <p>
               {video.description}
@@ -177,8 +175,10 @@ export function VideoSearchResult(props: VideoSearchResultProps): React.ReactEle
       </div>
       {showVideoOverlay && (
         <div className="video-overlay">
-          {/* Add your VideoOverlay component here */}
-          <video height="720" width="1280" id="videop" controls
+          <button className="button is-small" onClick={stream}>
+            Start Video
+          </button>
+          <video height="720" width="1280" id={"#" + video.uuid} controls
             autoPlay />
         </div>)}
     </div>

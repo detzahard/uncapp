@@ -107,12 +107,13 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
 
     // Load the media for streaming
     hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
-    hls.attachMedia(document.getElementById("videop"));
+    const awa = "#" + video.uuid;
+    hls.attachMedia(document.getElementById(awa));
   };
 
   return (
     <li>
-      <span style={{ cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
+      <span style={{cursor: 'pointer' }} onClick={handleOpenVideoOverlay}>
         {title}
       </span>{""}
       <button
@@ -143,10 +144,10 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
 
         <div className="video-overlay">
           <button className="button is-small" onClick={stream}>
-            Open Video
+            Start Video
           </button>
           {/* Add your VideoOverlay component here */}
-          <video height="720" width="1280" id="videop" controls
+          <video height="720" width="1280" id={"#" + video.uuid} controls
             autoPlay />
         </div>
       )}
