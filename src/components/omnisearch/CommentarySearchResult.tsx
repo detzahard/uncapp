@@ -61,7 +61,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
       return;
     }
 
-    const videoId = video.uuid;
+    const videoId = commentary.uuid;
 
     console.log(`Video ID is ${videoId}`);
     console.log("Looking for the final part...");
@@ -108,7 +108,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
 
     // Load the media for streaming
     hls.loadSource("data:application/x-mpegURL;base64," + btoa(data));
-    const awa = "#" + video.uuid;
+    const awa = "#" + commentary.uuid;
     hls.attachMedia(document.getElementById(awa));
   };
 
@@ -158,7 +158,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
           <button className="button is-small" onClick={stream}>
             Start Video
           </button>
-          <video height="720" width="1280" id={"#" + video.uuid} controls
+          <video height="720" width="1280" id={"#" + commentary.uuid} controls
             autoPlay />
         </div>)}
     </div>
