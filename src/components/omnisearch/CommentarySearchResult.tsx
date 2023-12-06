@@ -77,8 +77,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
 
       if (i == 0) i = 1;
 
-      const apiUrl = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
-      const url = 'https://cors-anywhere.herokuapp.com/' + apiUrl;
+      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
 
       console.log(`Testing ${url}`);
 
