@@ -4,25 +4,25 @@ updates:
     open-pull-requests-limit: 20
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "yearly"
     assignees:
-      - shepherdjerred
+      - detzahard
     reviewers:
-      - shepherdjerred
+      - detzahard
   - package-ecosystem: "npm"
     open-pull-requests-limit: 20
     directory: "/fetcher/"
     schedule:
-      interval: "monthly"
+      interval: "yearly"
     assignees:
-      - shepherdjerred
+      - detzahard
     reviewers:
-      - shepherdjerred
+      - detzahard
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "yearly"
     assignees:
-      - shepherdjerred
+      - detzahard
     reviewers:
-      - shepherdjerred
+      - detzahard
