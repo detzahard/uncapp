@@ -3,3 +3,14 @@
   bottom: 10px;
   right: 20px;
 }
+
+.tips-button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tips-toggle {
+  display:flex;
+  align-items:center;
+}

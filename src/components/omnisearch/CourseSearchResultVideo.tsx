@@ -1,7 +1,7 @@
 import { Video } from "../../model/Video";
 import { Course } from "../../model/Course";
 import React, { useState } from "react";
-import { getCourseVideoUrl, getStreamUrl } from "../../utils/UrlUtilities";
+import { getCourseVideoUrl, getCorsProxy } from "../../utils/UrlUtilities";
 import { Bookmarkable } from "../../model/Bookmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faCloudDownloadAlt, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -75,7 +75,7 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
 
       if (i == 0) i = 1;
 
-      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
+      const url = `${getCorsProxy()}https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
       //const url = 'https://cors-anywhere.herokuapp.com/' + apiUrl;
       console.log(`Testing ${url}`);
 
@@ -101,7 +101,7 @@ export function CourseSearchResultVideo(props: SearchResultVideoProps): React.Re
 
     let data = "#EXTM3U\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:10";
     for (let i = 0; i <= last; i++) {
-      data += `#EXTINF:10,\nhttps://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
+      data += `#EXTINF:10,\n${getCorsProxy()}https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
     }
 
     console.log(data);

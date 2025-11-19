@@ -1,6 +1,6 @@
 import { roleToString } from "../../model/Role";
 import React, { useState } from "react";
-import { getStreamUrl } from "../../utils/UrlUtilities";
+import { getCorsProxy } from "../../utils/UrlUtilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudDownloadAlt } from "@fortawesome/free-solid-svg-icons";
 import { Commentary } from "../../model/Commentary";
@@ -77,7 +77,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
 
       if (i == 0) i = 1;
 
-      const url = `https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
+      const url = `${getCorsProxy()}https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts`; 
 
       console.log(`Testing ${url}`);
 
@@ -103,7 +103,7 @@ export function CommentarySearchResult(props: CommentarySearchResultProps): Reac
 
     let data = "#EXTM3U\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-TARGETDURATION:10";
     for (let i = 0; i <= last; i++) {
-      data += `#EXTINF:10,\nhttps://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
+      data += `#EXTINF:10,\n${getCorsProxy()}https://d13z5uuzt1wkbz.cloudfront.net/${videoId}/HIDDEN4500-${String(i).padStart(5, "0")}.ts\n`
     }
 
     console.log(data);

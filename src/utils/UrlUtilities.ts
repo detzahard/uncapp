@@ -28,3 +28,30 @@ export function getCommentaryUrl(commentary: Commentary): string {
 export function getStreamUrl(video: Video | Commentary): string {
   return `https://www.skill-capped.com/lol/api/new/video/${video.uuid}/4500.m3u8`;
 }
+
+// CORS proxy used to bypass cross-origin restrictions for CloudFront-hosted segments
+// CORS proxy used to bypass cross-origin restrictions for CloudFront-hosted segments.
+// We allow toggling the proxy at runtime via localStorage, so exposed as a getter and setter.
+const DEFAULT_CORS_PROXY = "https://corsproxy.io/";
+
+export function isCorsProxyEnabled(): boolean {
+  try {
+    const v = localStorage.getItem("corsproxy.enabled");
+    if (v === null) return true; // default on
+    return v === "true";
+  } catch (e) {
+    return true;
+  }
+}
+
+export function setCorsProxyEnabled(enabled: boolean) {
+  try {
+    localStorage.setItem("corsproxy.enabled", enabled ? "true" : "false");
+  } catch (e) {
+    // ignore
+  }
+}
+
+export function getCorsProxy(): string {
+  return isCorsProxyEnabled() ? DEFAULT_CORS_PROXY : "";
+}
