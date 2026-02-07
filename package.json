@@ -28,7 +28,7 @@
     "fuse.js": "^7.1.0",
     "ga-4-react": "^0.1.281",
     "hls.js": "^1.6.15",
-    "react": "^19.2.0",
+    "react": "^19.2.4",
     "react-dom": "^19.2.0",
     "react-highlight-words": "^0.21.0",
     "react-redux": "^9.2.0",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.6",
+    "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@types/react-highlight-words": "^0.20.0",
     "@types/react-router-dom": "^5.3.3",
